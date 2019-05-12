@@ -1,49 +1,73 @@
 <template>
-    <Page>
-        <ActionBar title="Welcome to NativeScript-Vue!" android:flat="true"/>
-        <TabView android:tabBackgroundColor="#53ba82"
-                 android:tabTextColor="#c4ffdf"
-                 android:selectedTabTextColor="#ffffff"
-                 androidSelectedTabHighlightColor="#ffffff">
-            <TabViewItem title="Tab 1">
-                <GridLayout columns="*" rows="*">
-                    <Label class="message" :text="msg" col="0" row="0"/>
-                </GridLayout>
-            </TabViewItem>
-            <TabViewItem title="Tab 2">
-                <GridLayout columns="*" rows="*">
-                    <Label class="message" text="Tab 2 Content" col="0" row="0"/>
-                </GridLayout>
-            </TabViewItem>
-            <TabViewItem title="Tab 3">
-                <GridLayout columns="*" rows="*">
-                    <Label class="message" text="Tab 3 Content" col="0" row="0"/>
-                </GridLayout>
-            </TabViewItem>
-        </TabView>
+    <Page class="preview-page" actionBarHidden="true">
+        <GridLayout rows="350, 300" columns="*">
+            <FlexboxLayout
+                        row="0"
+                        col="0"
+                        flexDirection="column"
+                        class="preview-page__container-image"
+                        verticalAlignment="bottom"
+                        horizontalAlignment="center"
+                        alignItems="center"
+                        >
+                <Image src="~/assets/images/app-logo.png" stretch="none" loadMode="async" class="preview-page__image"/>
+                <Label class="preview-page__text" text="Take control of your money," width="300"/>
+                <Label class="preview-page__text" text="get started with ryptocurrencies." width="300"/>
+            </FlexboxLayout>
+            <FlexboxLayout
+                        row="1"
+                        col="0"
+                        flexDirection="column"
+                        verticalAlignment="bottom"
+                        horizontalAlignment="center">
+                    <Button text="Get started"
+                            class="preview-page__button"
+                            textAlignment="center"
+                            @tap="onRouteToRegistration"
+                            />
+            </FlexboxLayout>
+        </GridLayout>
     </Page>
 </template>
 
 <script >
+import Registration from './Registration.vue'
   export default {
+    components: { Registration },
     data() {
       return {
-        msg: 'Hello World!'
       }
+    },
+    methods: {
+        onRouteToRegistration() {
+            this.$navigateTo(Registration);
+        },
     }
   }
 </script>
-
-<style scoped>
-    ActionBar {
-        background-color: #53ba82;
-        color: #ffffff;
+<style>
+    .preview-page {
+        width: 100%;
+        background-color: #2c3134;
     }
 
-    .message {
-        vertical-align: center;
+    .preview-page__container-image {
+        width: 100%;
+    }
+
+    .preview-page__text {
         text-align: center;
-        font-size: 20;
-        color: #333333;
+        font-size: 18px;
+        color: #fff;
+    }
+
+    .preview-page__button {
+        width: 70%;
+        height: 15%;
+        margin-bottom: 40;
+        color: #fff;
+        font-weight: bold;
+        background-color: #657dff;
+        border-radius: 10;
     }
 </style>
