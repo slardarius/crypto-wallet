@@ -53,8 +53,8 @@
 
 
 <script>
+import Seeds from './Seeds.vue';
 export default {
-
   methods: {
     goBack() {
       this.$navigateBack();
@@ -66,8 +66,12 @@ export default {
         message: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
         okButtonText: "Yes",
         cancelButtonText: "No"
-      }).then(result => {
-        console.log(result);
+      }).then(answer => {
+        if (answer) {
+          this.$navigateTo(Seeds);
+        } else {
+            this.goBack();
+        }
       });
     }
   }
