@@ -107,9 +107,9 @@ export default {
     }
 
     .geristration-page__button {
-      margin-top: 60px;
-      width: 70%;
-      height: 7%;
+      width: 270;
+      height: 45;
+      margin-bottom: 40;
       color: #fff;
       font-weight: bold;
       background-color: #657dff;

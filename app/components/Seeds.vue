@@ -4,7 +4,7 @@
             <NavigationButton android.systemIcon="ic_menu_back" @tap="goBack" />
         </ActionBar>
 
-        <GridLayout rows="100 * auto" class="page">
+        <GridLayout rows="150, * auto" class="page" v-if="!is_show_control">
 
             <GridLayout row="0" class="dark" horizontalAlignment="center">
                 <Label text="Please carefully write down this phrase."
@@ -12,42 +12,54 @@
                 </Label>
             </GridLayout>
 
-            <StackLayout verticalAlignment="top" row="1" class="dark">
+            <StackLayout verticalAlignment="top" row="1" class="seeds-page__phrases-container">
                 <FlexboxLayout justifyContent="center" flexWrap="wrap" padding="35"
-                               style="word-break: break-word; font-size: 18;">
+                               style="word-break: break-word; font-size: 18;" class="seeds-page__phrases">
                     <Label v-for="(word, index) in arr_phrases"
-                           :col="index" :text="word" style="padding: 5; color: white;"></Label>
+                           :col="index" :text="word.title" style="padding: 5; color: white;"></Label>
                 </FlexboxLayout>
             </StackLayout>
 
             <StackLayout verticalAlignment="bottom" row="2">
-                <Label text="We will confirm on the next screen." class="small-text"></Label>
-                <Button text="I have written it down">
+                <Label horizontalAlignment="center" text="We will confirm on the next screen." textAlign="center" class="seeds-page__sub-title"></Label>
+                <Button text="I have written it down" class="seeds-page__button" @tap="onShowSelectedPhrases">
                 </Button>
             </StackLayout>
 
         </GridLayout>
 
-        <!--<StackLayout class="seeds-page__container">-->
-            <!--&lt;!&ndash;&ndash;&gt;-->
-            <!--<StackLayout class="seeds-page__title">-->
-                <!--<Label text="Please carefully write down this phrase"/>-->
-            <!--</StackLayout>-->
-            <!--&lt;!&ndash;&ndash;&gt;-->
-            <!--<StackLayout>-->
-                <!--<FlexboxLayout class="seeds-page__container-phrases" flexWrap="wrap" justifyContent="space-around">-->
-                    <!--<StackLayout v-for="phrase in arr_phrases" class="seeds-page__phrases-stack" width="70" height="20px">-->
-                        <!--<Label :text="phrase" class="seeds-page__phrases-text"/>-->
+        <GridLayout rows="100, * auto" v-if="is_show_control">
 
-                    <!--</StackLayout>-->
-                <!--</FlexboxLayout>-->
-            <!--</StackLayout>-->
-            <!--&lt;!&ndash;&ndash;&gt;-->
-            <!--<StackLayout>-->
-                <!--<Label v-for="phrase in arr_phrases" :text="phrase" class="seeds-page__phrases-text"/>-->
-            <!--</StackLayout>-->
-            <!--&lt;!&ndash;&ndash;&gt;-->
-        <!--</StackLayout>-->
+            <GridLayout row="0" class="dark" horizontalAlignment="center">
+                <Label text="Please carefully write down this phrase."
+                       fontSize="12" color="white" opacity="0.5">
+                </Label>
+            </GridLayout>
+
+
+            <StackLayout verticalAlignment="top" row="1" class="seeds-page__phrases-container" v-if="is_show_control">
+                <FlexboxLayout justifyContent="center" flexWrap="wrap" padding="35"
+                               style="word-break: break-word; font-size: 18;" class="seeds-page__phrases">
+                    <Label v-for="(word, index) in arr_phrases_selected"
+                           :col="index" :text="word" style="padding: 5; color: white;"></Label>
+                </FlexboxLayout>
+            </StackLayout>
+
+            <StackLayout verticalAlignment="top" row="2" class="seeds-page__phrases-container" v-if="is_show_control && !is_save_phrases">
+                <FlexboxLayout justifyContent="center" flexWrap="wrap"
+                               style="word-break: break-word; font-size: 18;" class="seeds-page__phrases seeds-page__phrases-disable-border">
+                    <Button v-for="(word, index) in arr_phrases"
+                            :text="word.title" :isEnabled="word.disable" class="seeds-page__button--mini" @tap="onSelectedPhrases(word, index)">
+                    </Button>
+                </FlexboxLayout>
+            </StackLayout>
+
+            <StackLayout verticalAlignment="bottom" row="2" v-if="is_save_phrases">
+                <Label horizontalAlignment="center" text="This is correct?" textAlign="center" class="seeds-page__sub-title"> </Label>
+                <Button text="Confirm" class="seeds-page__button" @tap="onStartRegistrationSeed"></Button>
+                <Button text="Clear" class="seeds-page__button seeds-page__button--clear" @tap="onClear"></Button>
+            </StackLayout>
+        </GridLayout>
 
     </Page>
 </template>
@@ -57,14 +69,87 @@
         name: "Seeds",
         data() {
             return {
-                arr_phrases: ['adapt', 'captain', 'clinic', 'flat', 'that', 'flush', 'stuff', 'bird', 'lion', 'adaptive']
+                arr_phrases: [
+                    {
+                        disable: true,
+                        title: 'adapt',
+                    },{
+                        disable: true,
+                        title: 'captain',
+                    },{
+                        disable: true,
+                        title: 'clinic',
+                    },{
+                        disable: true,
+                        title: 'flat',
+                    },{
+                        disable: true,
+                        title: 'that',
+                    },{
+                        disable: true,
+                        title: 'flush',
+                    },{
+                        disable: true,
+                        title: 'stuff',
+                    },{
+                        disable: true,
+                        title: 'bird',
+                    },{
+                        disable: true,
+                        title: 'lion',
+                    },{
+                        disable: true,
+                        title: 'adaptive',
+                    },{
+                        disable: true,
+                        title: 'week',
+                    },{
+                        disable: true,
+                        title: 'shose',
+                    },{
+                        disable: true,
+                        title: 'lorem',
+                    },{
+                        disable: true,
+                        title: 'inputs',
+                    },{
+                        disable: true,
+                        title: 'trade',
+                    },
+                ],
+                is_show_control: false,
+                is_save_phrases: false,
+                arr_phrases_selected: [],
             }
         },
         methods: {
             goBack() {
-                //
                 this.$navigateBack();
+            },
+
+            onClear() {
+              this.arr_phrases_selected = [];
+              this.arr_phrases.forEach( x=> x.disable = true );
+              this.is_save_phrases = false;
+            },
+
+            onShowSelectedPhrases() {
+              this.is_show_control = !this.is_show_control;
+            },
+
+            onSelectedPhrases(word, index) {
+                if (this.arr_phrases_selected.length <= 11) {
+                    this.arr_phrases[index].disable = false;
+                    this.arr_phrases_selected.push(word.title);
+                } else {
+                    this.is_save_phrases = true;
+                }
+            },
+
+            onStartRegistrationSeed() {
+                console.log('start');
             }
+
         }
     }
 </script>
@@ -78,31 +163,56 @@
         background-color: #2c3134;
     }
 
-    .seeds-page__container {
-        background-color: red;
+    .seeds-page__phrases-container {
+        padding: 30 15;
+    }
+    
+    .seeds-page__phrases {
+        background-color: #313639;
+        border-style: dot-dash;
+        border-width: 2;
+        border-color: #666;
     }
 
-    .seeds-page__title {
-        font-size: 12px;
-        font-weight: 300;
-        color: #949494;
-        height: 150;
+    .seeds-page__phrases-disable-border {
+        border-width: 0;
+        background: #2c3134;
     }
 
-    .seeds-page__container-phrases {
-        width: 300;
-        height: 300;
-        background-color: yellowgreen;
+    .seeds-page__sub-title {
+        font-size: 12;
+        color: #fff;
+        opacity: 0.5;
+        margin-bottom: 20;
     }
 
-    .seeds-page__phrases-stack {
+    .seeds-page__button {
+        width: 270;
+        height: 45;
+        margin-bottom: 40;
+        color: #fff;
+        font-weight: bold;
+        background-color: #657dff;
+        border-radius: 10;
+    }
+
+    .seeds-page__button--clear {
+        background-color: #2c3134;
+        border-width: 1;
+        border-color: #666;
+    }
+
+    .seeds-page__button--mini {
         padding: 10;
-        background-color: aqua;
+        margin: 0 10 10 0;
+        font-size: 12;
+        font-weight: 300;
+        color: #fff;
+        background-color: #657dff;
     }
 
-    .seeds-page__phrases-text {
-        font-size: 18px;
-        font-weight: 300;
-        color: #949494;
+    .seeds-page__button--mini:disabled {
+        background-color: #3c4871;
+        color: #616671;
     }
 </style>
