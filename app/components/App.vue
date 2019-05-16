@@ -42,9 +42,9 @@ import Seeds from './Seeds.vue';
         },
     },
     mounted() {
-        // setTimeout(() => {
-        //    this.$navigateTo(Seeds);
-        // }, 300);
+        setTimeout(() => {
+           this.$navigateTo(Seeds);
+        }, 300);
 
     }
   }

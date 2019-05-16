@@ -65,6 +65,7 @@
 </template>
 
 <script>
+    import store_wallet from '../store/store-wallet';
     export default {
         name: "Seeds",
         data() {
@@ -138,6 +139,7 @@
             },
 
             onSelectedPhrases(word, index) {
+                console.log(this.arr_phrases_selected.length);
                 if (this.arr_phrases_selected.length <= 11) {
                     this.arr_phrases[index].disable = false;
                     this.arr_phrases_selected.push(word.title);
@@ -147,6 +149,7 @@
             },
 
             onStartRegistrationSeed() {
+                store_wallet.dispatch('createWallet', this.arr_phrases_selected);
                 console.log('start');
             }
 
