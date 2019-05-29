@@ -66,6 +66,7 @@
 
 <script>
     import store_wallet from '../store/store-wallet';
+    import { SecureStorage } from "nativescript-secure-storage";
     export default {
         name: "Seeds",
         data() {
@@ -153,6 +154,20 @@
                 console.log('start');
             }
 
+        },
+        mounted() {
+            const secureStorage = new SecureStorage();
+            // console.log(secureStorage);
+            secureStorage.setSync(
+                {
+                    key: 'test',
+                    value: 'value'
+                }
+            );
+            const value = secureStorage.getSync({
+               key: 'test'
+            });
+            console.log('SecurityStorage \n\n', value);
         }
     }
 </script>

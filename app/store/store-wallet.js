@@ -1,11 +1,13 @@
 import Vuex from 'vuex';
 import Vue from 'nativescript-vue';
-import {ethers} from '../assets/ethers';
 Vue.use(Vuex);
 
 const store_wallet = new Vuex.Store({
     state: {
         wallet: {},
+        address: '',
+        private_key: '',
+        provider: '',
     },
     mutations: {
         set(state, {type, value}) {

@@ -29,8 +29,11 @@
 </template>
 
 <script >
+import { SecureStorage } from "nativescript-secure-storage";
 import Registration from './Registration.vue';
 import Seeds from './Seeds.vue';
+import Home from './Home-page';
+import {EthersWallet} from "../models/ethers-wallet";
   export default {
     components: { Registration, Seeds },
     data() {
@@ -42,9 +45,23 @@ import Seeds from './Seeds.vue';
         },
     },
     mounted() {
-        setTimeout(() => {
-           this.$navigateTo(Seeds);
-        }, 300);
+        const secure_storage = new SecureStorage();
+        const wallet_ethers = new EthersWallet();
+        wallet_ethers.onCreateWallet();
+        wallet_ethers.address = 'test';
+        secure_storage.get({
+            key: 'address'
+        }).then(resolve => {
+            if (resolve) {
+                setTimeout(() => {
+                   this.$navigateTo(Home);
+                }, 300);
+            } else {
+                setTimeout(() => {
+                    this.$navigateTo(Seeds);
+                }, 300);
+            }
+        }, error => console.log(error));
 
     }
   }
