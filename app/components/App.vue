@@ -46,22 +46,14 @@ import {EthersWallet} from "../models/ethers-wallet";
     },
     mounted() {
         const secure_storage = new SecureStorage();
-        const wallet_ethers = new EthersWallet();
-        wallet_ethers.onCreateWallet();
-        wallet_ethers.address = 'test';
         secure_storage.get({
-            key: 'address'
+            key: 'privateKey'
         }).then(resolve => {
-            if (resolve) {
-                setTimeout(() => {
-                   this.$navigateTo(Home);
-                }, 300);
-            } else {
-                setTimeout(() => {
-                    this.$navigateTo(Seeds);
-                }, 300);
-            }
-        }, error => console.log(error));
+            console.log('privateKey', resolve, '\n\n');
+            setTimeout(() => {
+                this.$navigateTo(Home);
+            }, 300);
+        });
 
     }
   }

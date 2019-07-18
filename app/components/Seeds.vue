@@ -16,14 +16,13 @@
                 <FlexboxLayout justifyContent="center" flexWrap="wrap" padding="35"
                                style="word-break: break-word; font-size: 18;" class="seeds-page__phrases">
                     <Label v-for="(word, index) in arr_phrases"
-                           :col="index" :text="word.title" style="padding: 5; color: white;"></Label>
+                           :key="index" :col="index" :text="word.title" style="padding: 5; color: white;"></Label>
                 </FlexboxLayout>
             </StackLayout>
 
             <StackLayout verticalAlignment="bottom" row="2">
                 <Label horizontalAlignment="center" text="We will confirm on the next screen." textAlign="center" class="seeds-page__sub-title"></Label>
-                <Button text="I have written it down" class="seeds-page__button" @tap="onShowSelectedPhrases">
-                </Button>
+                <Button text="I have written it down" class="seeds-page__button" @tap="onShowSelectedPhrases"/>
             </StackLayout>
 
         </GridLayout>
@@ -41,7 +40,7 @@
                 <FlexboxLayout justifyContent="center" flexWrap="wrap" padding="35"
                                style="word-break: break-word; font-size: 18;" class="seeds-page__phrases">
                     <Label v-for="(word, index) in arr_phrases_selected"
-                           :col="index" :text="word" style="padding: 5; color: white;"></Label>
+                           :key="index" :col="index" :text="word" style="padding: 5; color: white;"></Label>
                 </FlexboxLayout>
             </StackLayout>
 
@@ -49,15 +48,15 @@
                 <FlexboxLayout justifyContent="center" flexWrap="wrap"
                                style="word-break: break-word; font-size: 18;" class="seeds-page__phrases seeds-page__phrases-disable-border">
                     <Button v-for="(word, index) in arr_phrases"
-                            :text="word.title" :isEnabled="word.disable" class="seeds-page__button--mini" @tap="onSelectedPhrases(word, index)">
+                            :key="index" :text="word.title" :isEnabled="word.disable" class="seeds-page__button--mini" @tap="onSelectedPhrases(word, index)">
                     </Button>
                 </FlexboxLayout>
             </StackLayout>
 
             <StackLayout verticalAlignment="bottom" row="2" v-if="is_save_phrases">
                 <Label horizontalAlignment="center" text="This is correct?" textAlign="center" class="seeds-page__sub-title"> </Label>
-                <Button text="Confirm" class="seeds-page__button" @tap="onStartRegistrationSeed"></Button>
-                <Button text="Clear" class="seeds-page__button seeds-page__button--clear" @tap="onClear"></Button>
+                <Button text="Confirm" class="seeds-page__button" @tap="onStartRegistrationSeed()"/>
+                <Button text="Clear" class="seeds-page__button seeds-page__button--clear" @tap="onClear()"/>
             </StackLayout>
         </GridLayout>
 
@@ -74,49 +73,49 @@
                 arr_phrases: [
                     {
                         disable: true,
-                        title: 'adapt',
+                        title: 'radar',
                     },{
                         disable: true,
-                        title: 'captain',
+                        title: 'blur',
                     },{
                         disable: true,
-                        title: 'clinic',
+                        title: 'cabbage',
                     },{
                         disable: true,
-                        title: 'flat',
+                        title: 'chef',
                     },{
                         disable: true,
-                        title: 'that',
+                        title: 'fix',
                     },{
                         disable: true,
-                        title: 'flush',
+                        title: 'engine',
                     },{
                         disable: true,
-                        title: 'stuff',
+                        title: 'embark',
                     },{
                         disable: true,
-                        title: 'bird',
+                        title: 'joy',
                     },{
                         disable: true,
-                        title: 'lion',
+                        title: 'scheme',
                     },{
                         disable: true,
-                        title: 'adaptive',
+                        title: 'fiction',
                     },{
                         disable: true,
-                        title: 'week',
+                        title: 'master',
                     },{
                         disable: true,
-                        title: 'shose',
+                        title: 'release',
                     },{
                         disable: true,
-                        title: 'lorem',
+                        title: 'discover',
                     },{
                         disable: true,
-                        title: 'inputs',
+                        title: 'luggage',
                     },{
                         disable: true,
-                        title: 'trade',
+                        title: 'actual',
                     },
                 ],
                 is_show_control: false,
@@ -140,13 +139,17 @@
             },
 
             onSelectedPhrases(word, index) {
-                console.log(this.arr_phrases_selected.length);
-                if (this.arr_phrases_selected.length <= 11) {
-                    this.arr_phrases[index].disable = false;
-                    this.arr_phrases_selected.push(word.title);
-                } else {
-                    this.is_save_phrases = true;
+                try {
+                    if (this.arr_phrases_selected.length <= 11) {
+                        this.arr_phrases[index].disable = false;
+                        this.arr_phrases_selected.push(word.title);
+                    } else {
+                        this.is_save_phrases = true;
+                    }
+                } catch(e) {
+                    console.error(e);
                 }
+                
             },
 
             onStartRegistrationSeed() {
@@ -158,16 +161,16 @@
         mounted() {
             const secureStorage = new SecureStorage();
             // console.log(secureStorage);
-            secureStorage.setSync(
-                {
-                    key: 'test',
-                    value: 'value'
-                }
-            );
-            const value = secureStorage.getSync({
-               key: 'test'
-            });
-            console.log('SecurityStorage \n\n', value);
+            // secureStorage.setSync(
+            //     {
+            //         key: 'test',
+            //         value: 'value'
+            //     }
+            // );
+            // const value = secureStorage.getSync({
+            //    key: 'test'
+            // });
+            // console.log('SecurityStorage \n\n', value);
         }
     }
 </script>
